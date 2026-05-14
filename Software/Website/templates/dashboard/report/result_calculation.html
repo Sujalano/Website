@@ -1,0 +1,107 @@
+{% extends 'dashboard/index.html' %} 
+{% load custom_filters %}
+{% load static %}
+
+{% block page_content %}
+<!-- Corrected the static link (removed the extra space) -->
+<link rel="stylesheet" href="{% static 'dash/css/calculation_result.css' %}">
+
+<div class="report-wrapper">
+   
+    <div style="display: flex; align-items: center; width: 100%; padding: 20px 0; border-bottom: 1px solid #eee;">
+        
+        <!-- Left Column: Logo with 10% gap -->
+        <div style="flex: 0 0 20%; padding-left: 10%;">
+            <img src="{% static 'assets/images/logo/logo-google.svg' %}" alt="Logo" style="height: 60px; width: auto;">
+        </div>
+
+        <!-- Center Column: Text (Always Centered) -->
+        <div style="flex: 1; text-align: center;">
+            <h1 style="margin: 0; font-size: 1.8rem;">Company Name</h1>
+            <h5 style="margin: 5px 0;">Final EXAMINATION</h5>
+            <h5 style="margin: 0; color: #555;">Result Report for Grade 7 for the year of 2026.</h5>
+        </div>
+
+        <!-- Right Column: Button (Always on Right) -->
+        <div style="flex: 0 0 20%; text-align: right; padding-right: 2%;">
+            <button onclick="renderNewLink()" style="padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">
+                <a >Generate Report</a>
+            </button>
+            <script>
+                function renderNewLink() {
+                    // Get the current path (e.g., /school/dashboard/)
+                    let currentPath = window.location.pathname;
+
+                    // Ensure there is a trailing slash, then add your specific report path
+                    if (!currentPath.endsWith('/')) {
+                        currentPath += '/';
+                    }
+
+                    // Redirect to current path + the new action
+                    window.location.href = currentPath + 'Printable-Result/';
+                }
+                </script>
+        </div>
+
+    </div>
+
+
+
+    
+  
+    <br>
+    <table class="report-grid">
+        <thead>
+            <!-- Main Header -->
+            <tr>
+                <!-- Fixed: Combined double class into one -->
+                <th rowspan="2" class="col-roll center-align">Roll No.</th>
+                <th rowspan="2" class="col-name center-align">Student Name</th>
+                {% for subject in subjects %}
+                    <!-- Spans 9 columns for TH (3), PR (3), and Total (3) -->
+                    <th colspan="9" class="center-align">{{ subject }}</th>
+                {% endfor %}
+                <th rowspan="2" class="col-name center-align">GPA</th>
+                <th rowspan="2" class="col-name center-align">Remark</th>
+            </tr>
+            <!-- Sub Header -->
+            <tr>
+                {% for subject in subjects %}
+                    <th class="center-align">T.H.</th><th class="center-align">G.P.</th><th class="center-align">Grade</th>
+                    <th class="center-align">P.R.</th><th class="center-align">G.P.</th><th class="center-align">Grade</th>
+                    <th class="center-align">Total</th><th class="center-align">G.P.</th><th class="center-align">Grade</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for student in students %}
+            <tr>
+                <td class="center-align">{{ student.roll }}</td>
+                <td class="text-left">{{ student.name }}</td>
+                
+                {% for subject in subjects %}
+                    {% with marks=student.marks|get_item:subject %}
+                        <!-- 9 Columns per subject matching the header -->
+                        <td class="center-align">{{ marks.th }}</td>
+                        <td class="center-align">{{ marks.th_gp }}</td>
+                        <td class="center-align">{{ marks.th_gr }}</td>
+                        
+                        <td class="center-align">{{ marks.pr }}</td>
+                        <td class="center-align">{{ marks.pr_gp }}</td>
+                        <td class="center-align">{{ marks.pr_gr }}</td>
+                        
+                        <td class="center-align">{{ marks.total }}</td>
+                        <td class="center-align">{{ marks.tot_gp }}</td>
+                        <td class="center-align">{{ marks.tot_gr }}</td>
+                    {% endwith %}
+                {% endfor %}
+
+                <!-- GPA and Remark (Assuming these exist in your student object) -->
+                <td class="center-align">{{ student.gpa }}</td>
+                <td class="center-align">{{ student.remark }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

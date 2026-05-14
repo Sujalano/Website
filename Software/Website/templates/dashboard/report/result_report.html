@@ -1,0 +1,97 @@
+{% extends 'dashboard/index.html' %} 
+
+{% block page_content %}
+{% load static %}  <!-- MOVE THIS HERE -->
+{% load dict_extras %}
+
+<link href="{% static 'dash/css/sb-admin-2.min.css' %}" rel="stylesheet">
+<link href="{% static 'dash/css/report.css' %}" rel="stylesheet">
+<!-- ... rest of your code ... -->
+
+
+<script>
+function printByRoll(rollId) {
+    const target = document.getElementById(rollId);
+    if (target) {
+        // Tag the div so CSS knows to show only this one
+        target.classList.add('print-active');
+        window.print();
+        target.classList.remove('print-active');
+    }
+}
+</script>
+
+{% for student in students %}
+    <!-- Using student.id ensures uniqueness if roll numbers repeat -->
+    <div class="a4-page" id="report-{{ student.id }}">
+        <div class="grade-sheet-container">
+            <div class="top-nav-bar">
+                <div class="nav-column" style="justify-content: left; max-width: 10%;">
+                    <img src="{% static 'assets/images/logo/logo-google.svg' %}" class="header-logo">
+                </div>
+                <div class="nav-center" style="justify-content: center; margin:0;">
+                    <h1 style="margin:0;">Company Name</h1>
+                    <h5 style="margin:0;">Location, Contact Info</h5>
+                    <h6 style="margin:0;">Academic Year 2024</h6> <!-- Changed h9 to h6 (valid HTML) -->
+                </div>
+                <div class="no-print text-right" style="position: absolute; top: 15px; right: 15px;">
+                    <!-- Updated to match unique ID -->
+                    <button type="button" onclick="printByRoll('report-{{ student.id }}')" class="btn btn-sm btn-info shadow-sm">
+                        <i class="fas fa-print"></i> Print Roll #{{ student.roll }}
+                    </button>
+                </div>
+            </div>
+
+            <div class="student-info-grid">
+                <div><strong>The Grade Secured By:</strong> {{ student.name }}</div>
+                <div><strong>Roll No:</strong> {{ student.roll }}</div>
+                <div><strong>Class:</strong> {{ student.roll }}</div>
+            </div>
+
+          <table class="table table-grades table-bordered">
+            <thead>
+                <tr>
+                    <th rowspan="2">S.N.</th>
+                    <th rowspan="2">SUBJECTS</th>
+                    <th rowspan="2">CREDIT<br>HOUR</th>
+                    <!-- This spans 3 columns: TH, PR, and TOTAL -->
+                    <th colspan="3">OBTAINED GRADE</th>
+                    <th rowspan="2">GRADE<br>POINT</th>
+                    <th rowspan="2">REMARKS</th>
+                </tr>
+                <tr>
+                    <!-- These sit under OBTAINED GRADE -->
+                    <th>TH</th>
+                    <th>PR</th>
+                    <th>TOTAL</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for sub_name in subjects %}
+                {% with mark=student.marks|get_item:sub_name %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td class="text-left">{{ sub_name }}</td>
+                    <td>{{ mark.credit_hour|default:"-" }}</td> <!-- Adjust if credit hour is per subject -->
+                    <td>{{ mark.th_gr|default:"-" }}</td>
+                    <td>{{ mark.pr_gr|default:"-" }}</td>
+                    <td>{{ mark.tot_gr|default:"-" }}</td>
+                    <td>{{ mark.tot_gp|default:"-" }}</td>
+                    <td></td> <!-- Remarks column -->
+                </tr>
+                {% endwith %}
+                {% endfor %}
+            </tbody>
+        </table>
+
+
+            <div style="margin-top: auto; padding-bottom: 5mm;">
+                <div class="row">
+                    <div class="col-6 text-center"><span style="border-top: 1px solid black;">Class Teacher</span></div>
+                    <div class="col-6 text-center"><span style="border-top: 1px solid black;">Principal</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+{% endblock %}

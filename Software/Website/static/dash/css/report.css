@@ -1,0 +1,76 @@
+/* --- PRINTING LOGIC --- */
+@media print {
+    /* 1. Reset Body for printing */
+    body {
+        background: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    /* 2. Hide Dashboard, Navs, and all other reports */
+    /* We hide the wrapper and body children, then 'un-hide' only the active one */
+    body > *, 
+    #accordionSidebar, 
+    #content-wrapper, 
+    .navbar, 
+    .no-print,
+    .a4-page {
+        display: none !important;
+    }
+
+    /* 3. Setup the Page for A4 */
+    @page {
+        size: A4;
+        margin: 0; /* Let CSS padding handle the safety margin */
+    }
+
+    /* 4. Show ONLY the active report and force layout */
+    .print-active {
+        display: flex !important;
+        flex-direction: column !important;
+        visibility: visible !important;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 210mm;
+        height: 297mm;
+        margin: 0 !important;
+        padding: 10mm !important;
+        box-shadow: none !important;
+        border: none !important;
+        background-color: white !important;
+        -webkit-print-color-adjust: exact; /* Ensures colors/borders print */
+        print-color-adjust: exact;
+    }
+
+    /* Ensure all children of the active report are visible */
+    .print-active * {
+        display: initial; /* Resets hidden state for children */
+        visibility: visible !important;
+    }
+
+    /* 5. FIX: Table Borders (Bootstrap often hides these in print) */
+    .table-grades {
+        width: 100% !important;
+        border-collapse: collapse !important;
+    }
+
+    .table-grades td, 
+    .table-grades th {
+        border: 1px solid #000 !important; /* Force black borders */
+        background-color: transparent !important;
+    }
+
+    .grade-sheet-container {
+        display: flex !important;
+        flex-direction: column !important;
+        height: 100% !important;
+        border: 2px solid #000 !important;
+        padding: 8mm !important;
+        box-sizing: border-box !important;
+    }
+    
+    /* Force top nav and signatures to remain flex-positioned */
+    .top-nav-bar { display: flex !important; justify-content: space-between !important; }
+    .row { display: flex !important; width: 100% !important; }
+}

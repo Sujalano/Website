@@ -1,0 +1,417 @@
+{% extends "landing/base.html" %}
+{% load static %}
+
+{% block content %}
+<style>
+    .hero-section { padding: 80px 20px; background-color: #fcfcfc; }
+    .hero-container { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; gap: 50px; flex-wrap: wrap; }
+    
+    .hero-content { flex: 1; min-width: 300px; }
+    .hero-kicker { color: red; font-weight: bold; text-transform: uppercase; font-size: 14px; letter-spacing: 1px; display: block; margin-bottom: 10px; }
+    .hero-content h1 { font-size: 48px; line-height: 1.2; margin-bottom: 20px; color: #222; }
+    .hero-content h1 span { color: red; } /* Highlighted word */
+    .hero-content p { font-size: 18px; color: #555; line-height: 1.6; margin-bottom: 30px; }
+
+    .hero-btns { display: flex; gap: 15px; }
+    .btn-primary { background: red; color: white; padding: 15px 30px; border-radius: 5px; text-decoration: none; font-weight: bold; }
+    .btn-secondary { border: 2px solid red; color: red; padding: 13px 28px; border-radius: 5px; text-decoration: none; font-weight: bold; }
+
+    .hero-image { flex: 1; min-width: 300px; text-align: center; }
+    .hero-image img { width: 100%; max-width: 550px; border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+        .hero-container { flex-direction: column; text-align: center; }
+        .hero-btns { justify-content: center; }
+        .hero-content h1 { font-size: 36px; }
+    }
+    .software-container { 
+        max-width: 850px; 
+        margin: 50px auto; 
+        font-family: sans-serif; 
+    }
+    
+    .feature-row { 
+        display: flex; 
+        gap: 25px; 
+        cursor: pointer;
+        padding: 5px 0;
+    }
+
+    .marker-box { 
+        display: flex; 
+        flex-direction: column; 
+        align-items: center; 
+        width: 20px; 
+        flex-shrink: 0;
+    }
+    
+    /* The Bullet Point (Starts Grey) */
+    .red-dot { 
+        width: 14px; 
+        height: 14px; 
+        background: #ddd; 
+        border-radius: 50%; 
+        transition: all 0.3s ease;
+        margin-top: 5px;
+    }
+
+    /* The Connecting Line (Starts at 0 height) */
+    .red-line { 
+        width: 2px; 
+        height: 0px; 
+        background: red; 
+        transition: height 0.4s ease-in-out; 
+    }
+
+    /* The Description Text (Starts slightly faded) */
+    .feature-text { 
+        padding-bottom: 40px; 
+        line-height: 1.6; 
+        color: #777; 
+        transition: all 0.3s ease;
+        font-size: 17px;
+    }
+
+    /* --- THE HOVER ANIMATIONS --- */
+
+    /* 1. Turn dot red and make it glow */
+    .feature-row:hover .red-dot {
+        background: red;
+        transform: scale(1.3);
+        box-shadow: 0 0 12px rgba(255, 0, 0, 0.4);
+    }
+
+    /* 2. Grow the red line downward */
+    .feature-row:hover .red-line {
+        height: 70px; /* Adjust this if your text is longer */
+    }
+
+    /* 3. Darken the text and slide it to the right */
+    .feature-row:hover .feature-text {
+        color: #111;
+        transform: translateX(12px);
+    }
+      /* Container to align all boxes in a grid */
+  .services-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    padding: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  /* The individual box */
+  .service-box {
+    position: relative;
+    width: 300px;
+    height: 220px;
+    overflow: hidden;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    background: #eee;
+  }
+
+  .service-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  /* Overlay hidden by default */
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(10, 48, 102, 0.9); /* Professional deep blue */
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 15px;
+    box-sizing: border-box;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  /* Hover Effects */
+  .service-box:hover img { transform: scale(1.15); }
+  .service-box:hover .overlay { opacity: 1; }
+
+  .overlay h3 { margin-bottom: 8px; font-size: 1.2rem; border-bottom: 1px solid #fff; padding-bottom: 5px; }
+  .overlay p { font-size: 0.9rem; line-height: 1.5; }
+</style>
+<br>
+
+<section class="section services__v3" id="services">
+    <div class="container">
+            <div class="row mb-5">
+              <div class="col-md-8 mx-auto text-center"><span class="subtitle text-uppercase mb-3" data-aos="fade-up" data-aos-delay="0">Our Services</span>
+                <h2 class="mb-3" data-aos="fade-up" data-aos-delay="100">The Complete Toolkit for Modern Digital Growth.</h2>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="0" style="width:100%; ">
+                <div class="service-card p-4 rounded-4 h-100 d-flex flex-column justify-content-between gap-5">
+                   <div class="hero-container">
+                        <!-- Left Side: Text and Buttons -->
+                        <div class="hero-content">
+                            <span class="hero-kicker">Digital Solutions for Growth</span>
+                            <h1>Optimize your academy with <span>School Management Software</span></h1>
+                            <p>School management software is a digital platform designed to automate administrative tasks like attendance, grading, and fee collection into a single system. It improves communication between teachers, students, and parents while helping administrators make more informed, data-driven decisions. </p>
+                            
+                            <div class="hero-btns">
+                                <a href="#services" class="btn-primary">Explore Services</a>
+                                <a href="/contact" class="btn-secondary">Get a Quote</a>
+                            </div>
+                        </div>
+
+                        <!-- Right Side: Product Image -->
+                        <div class="hero-image">
+                            <!-- Replace the src below with your actual image path -->
+                            <img src="{% static 'dash/img/undraw_posting_photo.svg' %}" alt="Management Software Dashboard">
+                        </div>
+                    </div>
+                    <!-- START SCHOOL SOFTWARE SECTION -->
+                    <div class="software-container">
+                        <h2 style="text-align: center; margin-bottom: 50px; font-family: sans-serif;">School Management Features</h2>
+
+                        <!-- Feature 1 -->
+                        <div class="feature-row">
+                            <div class="marker-box">
+                                <div class="red-dot"></div>
+                                <div class="red-line"></div>
+                            </div>
+                            <div class="feature-text">
+                                <strong>Student Information System (SIS):</strong> Centralized database for enrollment, digital profiles, and historical academic records.
+                            </div>
+                        </div>
+
+                        <!-- Feature 2 -->
+                        <div class="feature-row">
+                            <div class="marker-box">
+                                <div class="red-dot"></div>
+                                <div class="red-line"></div>
+                            </div>
+                            <div class="feature-text">
+                                <strong>Automated Attendance Tracking:</strong> Real-time logging via mobile app or biometric integration with instant SMS alerts to parents.
+                            </div>
+                        </div>
+
+                        <!-- Feature 3 -->
+                        <div class="feature-row">
+                            <div class="marker-box">
+                                <div class="red-dot"></div>
+                                <div class="red-line"></div>
+                            </div>
+                            <div class="feature-text">
+                                <strong>Smart Gradebook & Examination:</strong> Automated result calculation, customizable report card generation, and performance analytics.
+                            </div>
+                        </div>
+
+                        <!-- Feature 4 -->
+                        <div class="feature-row">
+                            <div class="marker-box">
+                                <div class="red-dot"></div>
+                                <div class="red-line"></div>
+                            </div>
+                            <div class="feature-text">
+                                <strong>Fee & Finance Management:</strong> Secure online payment gateways, automated invoice generation, and pending-dues reminders.
+                            </div>
+                        </div>
+
+                        <!-- Feature 5 -->
+                        <div class="feature-row">
+                            <div class="marker-box">
+                                <div class="red-dot"></div>
+                                <div class="red-line"></div>
+                            </div>
+                            <div class="feature-text">
+                                <strong>Timetable & Schedule Planner:</strong> Drag-and-drop interface for managing class rotations, staff substitutions, and exam schedules.
+                            </div>
+                        </div>
+
+                        <!-- Feature 6 -->
+                        <div class="feature-row">
+                            <div class="marker-box">
+                                <div class="red-dot"></div>
+                                <div class="red-line"></div>
+                            </div>
+                            <div class="feature-text">
+                                <strong>Parent-Teacher Portal:</strong> Dedicated mobile access for homework tracking, announcements, and direct messaging.
+                            </div>
+                        </div>
+
+                        <!-- Feature 7 -->
+                        <div class="feature-row">
+                            <div class="marker-box">
+                                <div class="red-dot"></div>
+                                <div class="red-line"></div>
+                            </div>
+                            <div class="feature-text">
+                                <strong>Library & Asset Management:</strong> Digital cataloging, automated book issue/return tracking, and inventory monitoring.
+                            </div>
+                        </div>
+
+                        <!-- Feature 8 (Last one has no line) -->
+                        <div class="feature-row">
+                            <div class="marker-box">
+                                <div class="red-dot"></div>
+                            </div>
+                            <div class="feature-text">
+                                <strong>Staff & Payroll Management:</strong> Employee attendance, leaves tracking, and automated salary slip generation.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="services-container">
+                        <!-- 1. Student Information -->
+                        <div class="service-box">
+                            <img src="{% static 'dash/img/undraw_posting_photo.svg' %}" alt="Student Info">
+                            <div class="overlay">
+                            <h3>Student Information</h3>
+                            <p>Digital registration, medical records, and centralized student lifecycle tracking.</p>
+                            </div>
+                        </div>
+
+                        <!-- 2. Academic Management -->
+                        <div class="service-box">
+                            <img src="https://placeholder.com" alt="Academics">
+                            <div class="overlay">
+                            <h3>Academic Management</h3>
+                            <p>Automated grading, smart lesson planning, and digital report card generation.</p>
+                            </div>
+                        </div>
+
+                        <!-- 3. Attendance Tracking -->
+                        <div class="service-box">
+                            <img src="https://placeholder.com" alt="Attendance">
+                            <div class="overlay">
+                            <h3>Attendance Tracking</h3>
+                            <p>Real-time monitoring via RFID/Biometrics with instant parent notifications.</p>
+                            </div>
+                        </div>
+
+                        <!-- 4. Fee Management -->
+                        <div class="service-box">
+                            <img src="https://placeholder.com" alt="Fees">
+                            <div class="overlay">
+                            <h3>Fee Management</h3>
+                            <p>Secure online payments, automated invoicing, and clear financial dues tracking.</p>
+                            </div>
+                        </div>
+
+                        <!-- 5. Communication Portal -->
+                        <div class="service-box">
+                            <img src="https://placeholder.com" alt="Communication">
+                            <div class="overlay">
+                            <h3>Communication Portal</h3>
+                            <p>Integrated SMS and email systems for seamless school-to-home interaction.</p>
+                            </div>
+                        </div>
+
+                        <!-- 6. Smart Scheduling -->
+                        <div class="service-box">
+                            <img src="https://placeholder.com" alt="Scheduling">
+                            <div class="overlay">
+                            <h3>Smart Scheduling</h3>
+                            <p>Conflict-free timetables for classes, exams, and staff rotations.</p>
+                            </div>
+                        </div>
+                        </div>
+                 <!--Pricing Planings-->
+                    <link href="{% static 'assets/css/pricing.css' %}" rel="stylesheet">
+                    <link rel="stylesheet" href="https://cdn.lineicons.com/3.0/lineicons.css"> 
+                    <section class="price_plan_area section_padding_130_80" id="pricing">
+                    <div class="container">
+                        <div class="row justify-content-center">
+                        <div class="col-12 col-sm-8 col-lg-6">
+                            <!-- Section Heading-->
+                            <div class="section-heading text-center wow fadeInUp" data-wow-delay="0.2s" style="visibility: visible; animation-delay: 0.2s; animation-name: fadeInUp;">
+                            <h6>Pricing Plans</h6>
+                            <h3>Let's find a way together</h3>
+                            <p>Appland is completely creative, lightweight, clean &amp; super responsive app landing page.</p>
+                            <div class="line"></div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="row justify-content-center">
+                        <!-- Single Price Plan Area-->
+                        <div class="col-12 col-sm-8 col-md-6 col-lg-4">
+                            <div class="single_price_plan wow fadeInUp" data-wow-delay="0.2s" style="visibility: visible; animation-delay: 0.2s; animation-name: fadeInUp;">
+                            <div class="title">
+                                <h3>Start Up</h3>
+                                <p>Start a trial</p>
+                                <div class="line"></div>
+                            </div>
+                            <div class="price">
+                                <h4>$0</h4>
+                            </div>
+                            <div class="description">
+                                <p><i class="lni lni-checkmark-circle"></i>Duration: 7days</p>
+                                <p><i class="lni lni-checkmark-circle"></i>10 Features</p>
+                                <p><i class="lni lni-close"></i>No Hidden Fees</p>
+                                <p><i class="lni lni-close"></i>100+ Video Tuts</p>
+                                <p><i class="lni lni-close"></i>No Tools</p>
+                            </div>
+                            <div class="button"><a class="btn btn-success btn-2" href="#">Get Started</a></div>
+                            </div>
+                        </div>
+                        <!-- Single Price Plan Area-->
+                        <div class="col-12 col-sm-8 col-md-6 col-lg-4">
+                            <div class="single_price_plan active wow fadeInUp" data-wow-delay="0.2s" style="visibility: visible; animation-delay: 0.2s; animation-name: fadeInUp;">
+                            <!-- Side Shape-->
+                            <div class="side-shape"><img src="https://bootdey.com/img/popular-pricing.png" alt=""></div>
+                            <div class="title"><span>Popular</span>
+                                <h3>Small Business</h3>
+                                <p>For Small Business Team</p>
+                                <div class="line"></div>
+                            </div>
+                            <div class="price">
+                                <h4>$9.99</h4>
+                            </div>
+                            <div class="description">
+                                <p><i class="lni lni-checkmark-circle"></i>Duration: 3 Month</p>
+                                <p><i class="lni lni-checkmark-circle"></i>50 Features</p>
+                                <p><i class="lni lni-checkmark-circle"></i>No Hidden Fees</p>
+                                <p><i class="lni lni-checkmark-circle"></i>150+ Video Tuts</p>
+                                <p><i class="lni lni-close"></i>5 Tools</p>
+                            </div>
+                            <div class="button"><a class="btn btn-warning" href="#">Get Started</a></div>
+                            </div>
+                        </div>
+                        <!-- Single Price Plan Area-->
+                        <div class="col-12 col-sm-8 col-md-6 col-lg-4">
+                            <div class="single_price_plan wow fadeInUp" data-wow-delay="0.2s" style="visibility: visible; animation-delay: 0.2s; animation-name: fadeInUp;">
+                            <div class="title">
+                                <h3>Enterprise</h3>
+                                <p>Unlimited Possibilities</p>
+                                <div class="line"></div>
+                            </div>
+                            <div class="price">
+                                <h4>$49.99</h4>
+                            </div>
+                            <div class="description">
+                                <p><i class="lni lni-checkmark-circle"></i>Duration: 1 year</p>
+                                <p><i class="lni lni-checkmark-circle"></i>Unlimited Features</p>
+                                <p><i class="lni lni-checkmark-circle"></i>No Hidden Fees</p>
+                                <p><i class="lni lni-checkmark-circle"></i>Unlimited Video Tuts</p>
+                                <p><i class="lni lni-checkmark-circle"></i>Unlimited Tools</p>
+                            </div>
+                            <div class="button"><a class="btn btn-info" href="#">Get Started</a></div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                    </section>
+
+                </div>
+            </div>
+    </div>
+</section>
+
+{% endblock %}
